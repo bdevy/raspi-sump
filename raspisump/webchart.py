@@ -26,20 +26,26 @@ def create_folders(year, month, homedir):
         subprocess.call(create_month)
 
 
-def create_chart(homedir):
+def create_chart(homedir, csv_name):
     '''Create a chart of sump pit activity and save to web folder'''
-    csv_file = '{}csv/waterlevel-{}.csv'.format(
-        homedir, time.strftime('%Y%m%d')
+    if csv_name == 'waterlevel':
+        title = 'Water'
+    elif csv_name == 'watertemp':
+        title = 'Temperature'
+    else:
+        pass
+    csv_file = '{}csv/{}-{}.csv'.format(
+        homedir, csv_name, time.strftime('%Y%m%d')
         )
-    filename = '{}charts/today.png'.format(homedir)
+    filename = '{}charts/today_{}.png'.format(homedir, csv_name)
     bytes2str = todaychart.bytesdate2str('%H:%M:%S')
-    todaychart.graph(csv_file, filename, bytes2str)
+    todaychart.graph(csv_file, filename, bytes2str, title)
 
 
-def copy_chart(year, month, today, homedir):
+def copy_chart(year, month, today, homedir, csv_name):
     '''Copy today.png to year/month/day folder for web viewing'''
-    copy_cmd = 'cp {}charts/today.png {}charts/{}/{}/{}.png'.format(
-        homedir, homedir, year, month, today
+    copy_cmd = 'cp {}charts/today_{}.png {}charts/{}/{}/{}_{}.png'.format(
+        homedir, csv_name, homedir, year, month, today, csv_name
         )
     copy_file = copy_cmd.split(' ')
     subprocess.call(copy_file)

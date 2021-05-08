@@ -22,7 +22,9 @@ reading_interval = config.getint('pit', 'reading_interval')
 
 if reading_interval == 0:
     reading.water_depth()
+    reading.temp_reading()
 else:
     while True:
         reading.water_depth()
+	reading.temp_reading()
         time.sleep(reading_interval)

@@ -47,24 +47,26 @@ def initiate_heartbeat():
 
 
 def water_reading():
-    """Initiate a water level reading."""
-    pit_depth = configs["pit_depth"]
-    trig_pin = configs["trig_pin"]
-    echo_pin = configs["echo_pin"]
-    temperature = configs["temperature"]
-    unit = configs["unit"]
+    '''Initiate a water level reading.'''
+    pit_depth = configs['pit_depth']
+    trig_pin = configs['trig_pin']
+    echo_pin = configs['echo_pin']
+    round_to = 1
+    temperature = configs['temperature']
+    unit = configs['unit']
 
-    value = sensor.Measurement(trig_pin, echo_pin, temperature, unit)
+    value = sensor.Measurement(trig_pin, echo_pin, temperature, unit, round_to)
 
     try:
         raw_distance = value.raw_distance(sample_wait=0.3)
     except SystemError:
-        log.log_errors(
-            "**ERROR - Signal not received. Possible cable or sensor problem."
-        )
+        log.log_errors("**ERROR - Signal not received. Possible cable or sensor problem.")
         exit(0)
 
-    return round(value.depth(raw_distance, pit_depth), 1)
+    if unit == 'imperial':
+        return value.depth_imperial(raw_distance, pit_depth)
+    if unit == 'metric':
+        return value.depth_metric(raw_distance, pit_depth)
 
 
 def water_depth():
@@ -87,3 +89,32 @@ def water_depth():
         pass
 
     initiate_heartbeat()
+
+
+def temp_reading():
+    '''Determine temperature and log result
+    '''
+
+    temp = current_temp()
+
+    log.log_reading_temp(temp)
+
+
+def current_temp():
+    '''Get temperature from temp probe'''
+    import re
+
+    unit = configs['unit']
+
+    with open("/sys/bus/w1/devices/28-01145ef3e51e/w1_slave") as File:
+        output = File.read()
+    txt = re.search(r"t=\d+", output).group(0)
+    temp = txt.split("=")
+    tempc = round(float(temp[1]) / 1000, 1)
+    tempf = round(float(temp[1]) / 1000 * 1.8 + 32, 1)
+
+    if unit == 'imperial':
+        return tempf
+    if unit == 'metric':
+        return tempc
+
