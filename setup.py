@@ -27,6 +27,7 @@ add_files = [
     (homedir + "cron", ["cron/README.md"]),
     (homedir + "cron", ["cron/picrontab"]),
     (homedir + "web", ["conf/web/index.html"]),
+    (homedir + "web", ["conf/web/index.html-watertemp"]),
     (homedir + "web/images", ["conf/web/images/logo.png"]),
     (homedir + "web/css", ["conf/web/css/index.html"]),
     (homedir + "web/css", ["conf/web/css/raspi.css"]),

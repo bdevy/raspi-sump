@@ -26,5 +26,5 @@ if reading_interval == 0:
 else:
     while True:
         reading.water_depth()
-	reading.temp_reading()
+        reading.temp_reading()
         time.sleep(reading_interval)
