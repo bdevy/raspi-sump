@@ -20,7 +20,7 @@
 <td><H1>Raspi-Sump Current Water Level</H1></td>
 </tr>
 <tr>
-<p><td><img class="displayed" src="charts/today.png" alt="Today's Water Level" longdesc="Generated with Matplotlib"></td>
+<p><td><img class="displayed" src="charts/today_waterlevel.png" alt="Today's Water Level" longdesc="Generated with Matplotlib"></td>
 </tr>
 
 </br></br>
