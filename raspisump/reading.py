@@ -24,6 +24,7 @@ configs = {
     "trig_pin": config.getint("gpio_pins", "trig_pin"),
     "echo_pin": config.getint("gpio_pins", "echo_pin"),
     "unit": config.get("pit", "unit"),
+    "temperature_file": config.get("pit", "temperature_file"),
 }
 
 # If item in raspisump.conf add to configs dict. If not provide defaults.
@@ -51,11 +52,10 @@ def water_reading():
     pit_depth = configs['pit_depth']
     trig_pin = configs['trig_pin']
     echo_pin = configs['echo_pin']
-    round_to = 1
     temperature = configs['temperature']
     unit = configs['unit']
 
-    value = sensor.Measurement(trig_pin, echo_pin, temperature, unit, round_to)
+    value = sensor.Measurement(trig_pin, echo_pin, temperature, unit)
 
     try:
         raw_distance = value.raw_distance(sample_wait=0.3)
@@ -64,9 +64,9 @@ def water_reading():
         exit(0)
 
     if unit == 'imperial':
-        return value.depth_imperial(raw_distance, pit_depth)
+        return round(value.depth_imperial(raw_distance, pit_depth), 1)
     if unit == 'metric':
-        return value.depth_metric(raw_distance, pit_depth)
+        return round(value.depth_metric(raw_distance, pit_depth), 1)
 
 
 def water_depth():
@@ -105,8 +105,9 @@ def current_temp():
     import re
 
     unit = configs['unit']
+    temperature_file = configs['temperature_file']
 
-    with open("/sys/bus/w1/devices/28-01145ef3e51e/w1_slave") as File:
+    with open(temperature_file) as File:
         output = File.read()
     txt = re.search(r"t=\d+", output).group(0)
     temp = txt.split("=")

@@ -25,7 +25,7 @@ def log_reading(water_depth):
 def log_reading_temp(water_temp):
     '''Log time and water temp reading.'''
     time_of_reading = time.strftime("%H:%M:%S,")
-    filename = "/home/pi/raspi-sump/csv-temp/watertemp-{}.csv".format(
+    filename = "/home/pi/raspi-sump/csv/watertemp-{}.csv".format(
         time.strftime("%Y%m%d")
     )
     csv_file = open(filename, 'a')
