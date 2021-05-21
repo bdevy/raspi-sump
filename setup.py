@@ -61,7 +61,9 @@ setup(
     packages=["raspisump"],
     scripts=raspi_sump_files,
     data_files=add_files,
-    install_requires=["hcsr04sensor>=1.6"],
+    install_requires=[
+        "hcsr04sensor>=1.6"
+    ],
 )
 
 if os.path.isdir(homedir):
