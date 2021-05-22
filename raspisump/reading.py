@@ -12,7 +12,7 @@ try:
 except ImportError:
     import configparser  # Python3
 from hcsr04sensor import sensor
-from raspisump import log, alerts, heartbeat
+from raspisump import log, alerts, heartbeat, storage
 
 config = configparser.RawConfigParser()
 config.read("/home/pi/raspi-sump/raspisump.conf")
@@ -24,7 +24,7 @@ configs = {
     "trig_pin": config.getint("gpio_pins", "trig_pin"),
     "echo_pin": config.getint("gpio_pins", "echo_pin"),
     "unit": config.get("pit", "unit"),
-    "temperature_file": config.get("pit", "temperature_file"),
+    "temperature_file": config.get("pit", "temperature_file")
 }
 
 # If item in raspisump.conf add to configs dict. If not provide defaults.
@@ -79,7 +79,7 @@ def water_depth():
 
     if water_depth < 0.0:
         water_depth = 0.0
-    log.log_reading(water_depth)
+    #log.log_reading(water_depth)
 
     if water_depth > critical_water_level and configs["alert_when"] == "high":
         alerts.determine_if_alert(water_depth)
@@ -90,15 +90,15 @@ def water_depth():
 
     initiate_heartbeat()
 
+    return water_depth
 
 def temp_reading():
-    '''Determine temperature and log result
+    '''Determine temperature and return result
     '''
 
-    temp = current_temp()
+    return current_temp()
 
-    log.log_reading_temp(temp)
-
+    #log.log_reading_temp(temp)
 
 def current_temp():
     '''Get temperature from temp probe'''
