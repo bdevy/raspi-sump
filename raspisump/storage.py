@@ -21,7 +21,7 @@ def something(metrics):
        determines and calls storage mechanisms.'''
 
 
-def csv_wrter(value, csv_file):
+def csv_writer(value, csv_file):
     '''Store data using original csv method.'''
     log.log_reading(value, csv_file)
 
