@@ -15,6 +15,23 @@ except ImportError:
     import configparser # Python3
 from raspisump import reading
 
+def store_values(values):
+    ''' Decide which storage mechanism to use. '''
+
+    if use_csv:
+        storage.csv_writer(values[depth], "waterlevel")
+
+        if monitor_temp:
+            storage.csv_writer(values[temp], "watertemp")
+
+    if use_zabbix:
+        #storage.zabbix_writer(values)
+        pass
+
+    if use_influxdb:
+        storage.influxdb_writer(values)
+
+
 config = configparser.RawConfigParser()
 
 config.read('/home/pi/raspi-sump/raspisump.conf')
@@ -42,21 +59,4 @@ else:
 
         store_values(values)
         time.sleep(reading_interval)
-
-
-def store_values(values):
-    ''' Decide which storage mechanism to use. '''
-
-    if use_csv:
-        storage.csv_writer(values[depth], "waterlevel")
-
-        if monitor_temp:
-            storage.csv_writer(values[temp], "watertemp")
-
-    if use_zabbix:
-        #storage.zabbix_writer(values)
-        pass
-
-    if use_influxdb:
-        storage.influxdb_writer(values)
 
