@@ -15,17 +15,6 @@ from datetime import datetime
 config = configparser.RawConfigParser()
 config.read("/home/pi/raspi-sump/raspisump.conf")
 
-configs = {
-    "zabbix_host": config.get("storage", "zabbix_host"),
-    "influxdb_host": config.get("storage", "influxdb_host"),
-    "influxdb_port": config.get("storage", "influxdb_port"),
-    "influxdb_username": config.get("storage", "influxdb_username"),
-    "influxdb_password": config.get("storage", "influxdb_password"),
-    "influxdb_database": config.get("storage", "influxdb_database"),
-    "influxdb_measurement": config.get("storage", "influxdb_measurement"),
-    "influxdb_location": config.get("storage", "influxdb_location")
-}
-
 
 def something(metrics):
     '''receives metrics from sensor collection function,
@@ -40,10 +29,23 @@ def csv_wrter(value, csv_file):
 def zabbix_writer(metrics):
     '''Store data using zabbix trapper method.'''
 
-
+    configs = {
+        "zabbix_host": config.get("storage", "zabbix_host")
+    }
 
 def influxdb_writer(values):
     '''Store data using influxdb method.'''
+    from influxdb import InfluxDBClient
+
+    configs = {
+        "influxdb_host": config.get("storage", "influxdb_host"),
+        "influxdb_port": config.get("storage", "influxdb_port"),
+        "influxdb_username": config.get("storage", "influxdb_username"),
+        "influxdb_password": config.get("storage", "influxdb_password"),
+        "influxdb_database": config.get("storage", "influxdb_database"),
+        "influxdb_measurement": config.get("storage", "influxdb_measurement"),
+        "influxdb_location": config.get("storage", "influxdb_location")
+    }
 
     dbClient = InfluxDBClient(host=configs["influxdb_host"], port=configs["influxdb_port"], username=configs["influxdb_username"], password=configs["influxdb_password"], database=configs["influxdb_database"])
 
