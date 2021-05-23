@@ -63,7 +63,7 @@ setup(
     data_files=add_files,
     install_requires=[
         "hcsr04sensor>=1.6",
-        "influxdb-python",
+        "influxdb",
     ],
 )
 
