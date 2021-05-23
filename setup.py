@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-version = "1.2.4"
+version = "1.3.0"
 
 homedir = "/home/pi/raspi-sump/"
 
@@ -62,7 +62,8 @@ setup(
     scripts=raspi_sump_files,
     data_files=add_files,
     install_requires=[
-        "hcsr04sensor>=1.6"
+        "hcsr04sensor>=1.6",
+        "influxdb-python",
     ],
 )
 
